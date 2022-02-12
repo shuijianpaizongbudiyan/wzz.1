@@ -1,0 +1,76 @@
+import pandas as pd
+df = pd.read_csv("d:/Salaries.csv")
+print(df.head(20))#前20行
+print(df.tail(5))#后5行
+print(df.dtypes)#打印各项的类型
+print(df.shape[1])#打印列数
+print(df.shape[0])#打印行数
+print(type(df))
+print(type(df["salary"]))
+print(df.ndim)#维数
+print(df.size)
+from numpy import *
+print(mean(df))#求平均值
+
+list1 = str(df["rank"])
+#map 类型转换
+list_phd = list(map(int,df["service"]))
+import numpy as np
+#平均值
+print(np.mean(list_phd))
+print(np.mean(df["service"]))
+#标准差
+print(np.std(list_phd))
+print(np.std(df["service"]))
+
+
+
+
+         rank discipline  phd  service   sex  salary
+0        Prof          B   56       49  Male  186960
+1        Prof          A   12        6  Male   93000
+2        Prof          A   23       20  Male  110515
+3        Prof          A   40       31  Male  131205
+4        Prof          B   20       18  Male  104800
+5        Prof          A   20       20  Male  122400
+6   AssocProf          A   20       17  Male   81285
+7        Prof          A   18       18  Male  126300
+8        Prof          A   29       19  Male   94350
+9        Prof          A   51       51  Male   57800
+10       Prof          B   39       33  Male  128250
+11       Prof          B   23       23  Male  134778
+12   AsstProf          B    1        0  Male   88000
+13       Prof          B   35       33  Male  162200
+14       Prof          B   25       19  Male  153750
+15       Prof          B   17        3  Male  150480
+16   AsstProf          B    8        3  Male   75044
+17   AsstProf          B    4        0  Male   92000
+18       Prof          A   19        7  Male  107300
+19       Prof          A   29       27  Male  150500
+         rank discipline  phd  service     sex  salary
+73       Prof          B   18       10  Female  105450
+74  AssocProf          B   19        6  Female  104542
+75       Prof          B   17       17  Female  124312
+76       Prof          A   28       14  Female  109954
+77       Prof          A   23       15  Female  109646
+rank          object
+discipline    object
+phd            int64
+service        int64
+sex           object
+salary         int64
+dtype: object
+6
+78
+<class 'pandas.core.frame.DataFrame'>
+<class 'pandas.core.series.Series'>
+2
+468
+phd            19.705128
+service        15.051282
+salary     108023.782051
+dtype: float64
+15.051282051282051
+15.051282051282051
+12.061697626718876
+12.061697626718875
