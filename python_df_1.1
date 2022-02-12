@@ -1,0 +1,99 @@
+from datetime import datetime
+import pandas as pd
+import heapq
+import matplotlib.pyplot as plt
+ 
+df = pd.read_excel("d:/wzz.xlsx")
+import numpy as np
+df.dropna(subset=["orderAmount"])
+#计算交易总金额（GMV）
+print(df.userID.nunique())
+gmv = df.orderAmount.sum()
+print(gmv)
+#计算总销售额
+total_payment = df.payment.sum()
+print(total_payment)
+#计算实际销售额
+real_payment = total_payment - df[df.chargeback=='是'].payment.sum()
+print(real_payment)
+#计算退货率
+a = len(df['chargeback'])
+b = len(df[df.chargeback=='是'])
+print(b/a)
+#计算客单价
+c = len(df.drop_duplicates('orderID'))
+print(real_payment/c)
+#计算每月累计gmv
+df["month"] = df.orderTime.dt.month
+gmv_by_month = df.groupby("month")["orderAmount"].sum()
+print(gmv_by_month)
+#计算每月总销售额及趋势分析
+df["month"] = df.orderTime.dt.month
+total_by_month = df.groupby("month")["payment"].sum()
+print(total_by_month)
+x_data = range(1,13)
+y_data = df.groupby("month")["payment"].sum()
+plt.plot(x_data,y_data)
+plt.show()
+#按渠道统计orderAmount，画出前十大渠道的饼图（nlargest）
+x = df.groupby(df["chanelID"]).orderAmount.sum()
+print(heapq.nlargest(10,x))
+b = heapq.nlargest(10,range(len(x)),x.__getitem__)
+plt.pie(heapq.nlargest(10,x),labels=df.iloc[b]["chanelID"])
+#统计周一到周日哪天的下单量最高
+df["dayofweek"] = df["orderTime"].dt.dayofweek
+print(df["dayofweek"].value_counts())
+#统计每天哪个时段下单量最高
+time = df["orderTime"].dt.hour.value_counts()
+print(time.head(1))
+
+
+
+
+79357
+109751550.78
+122069693.67231365
+105972374.03740042
+0.13180370515603929
+1013.7986610293736
+month
+1      7329828.41
+2      5576556.76
+3      6877928.01
+4      7391514.92
+5     10074104.02
+6     10651183.91
+7     10312963.11
+8     10601289.03
+9      9757057.39
+10     9466722.81
+11    10938387.21
+12    10774015.20
+Name: orderAmount, dtype: float64
+month
+1     8.188591e+06
+2     6.368510e+06
+3     7.718194e+06
+4     8.444964e+06
+5     1.145246e+07
+6     1.184074e+07
+7     1.143067e+07
+8     1.156562e+07
+9     1.067012e+07
+10    1.017284e+07
+11    1.220110e+07
+12    1.201589e+07
+Name: payment, dtype: float64
+
+￼
+[17453513.530000076, 13270168.189999934, 12894897.65999996, 9716806.110000007, 8832459.139999995, 8741207.98000002, 6675614.919999998, 6639029.350000002, 4556440.4399999995, 4418595.160000002]
+0    16701
+1    16667
+6    15405
+2    14822
+5    14434
+3    13270
+4    13258
+Name: dayofweek, dtype: int64
+13    13247
+Name: orderTime, dtype: int64
